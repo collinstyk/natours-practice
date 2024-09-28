@@ -10,7 +10,7 @@ process.on('uncaughtException', (err) => {
 
 dotenv.config({ path: './config.env' });
 
-const app = require('./app');
+const app = require('../app');
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
@@ -30,15 +30,18 @@ async function main() {
 main();
 
 // 4) START SERVER
-const port = process.env.PORT || 3000;
-const server = app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
+// const port = process.env.PORT || 3000;
+// const server = app.listen(port, () => {
+//   console.log(`App running on port ${port}...`);
+// });
+
+module.exports = (req, res) => app(req, res);
 
 process.on('unhandledRejection', (err) => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
+  // server.close(() => {
+  //   process.exit(1);
+  // });
+  process.exit(1);
 });
