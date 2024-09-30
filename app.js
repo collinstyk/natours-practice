@@ -11,6 +11,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const cors = require('cors');
+const serverless = require('serverless-http');
 
 const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
@@ -54,7 +55,7 @@ app.use(
 );
 
 // URL used parse data coming from an URL encoded form
-app.use(express.urlencoded({ extended: true, imit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Cookie parser, reading data from cookies into req.body
 app.use(cookieParser());
@@ -92,10 +93,10 @@ app.use((req, res, next) => {
 
 // Mounting Routers
 app.use('/', viewRouter); // Serverside rendering
-app.use('/v1/tours', tourRouter);
-app.use('/v1/users', userRouter);
-app.use('/v1/reviews', reviewRouter);
-app.use('/v1/bookings', bookingRouter);
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
@@ -103,3 +104,4 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
+module.exports = serverless(app);

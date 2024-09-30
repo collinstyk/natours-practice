@@ -8,7 +8,10 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
+if (process.env.NODE_ENV !== 'production') {
+  // configured for vercel
+  dotenv.config({ path: './config.env' });
+}
 
 const app = require('../app');
 
@@ -17,17 +20,32 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD,
 );
 
-async function main() {
+// async function main() {
+//   await mongoose.connect(DB, {
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//   });
+//   console.log('DB connection successful!');
+// }
+
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected) return;
+
   await mongoose.connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true,
   });
+  isConnected = true;
   console.log('DB connection successful!');
 }
 
-main();
+// main();
 
 // 4) START SERVER
 // const port = process.env.PORT || 3000;
@@ -35,7 +53,10 @@ main();
 //   console.log(`App running on port ${port}...`);
 // });
 
-module.exports = (req, res) => app(req, res);
+module.exports = async (req, res) => {
+  await connectDB;
+  app(req, res);
+};
 
 process.on('unhandledRejection', (err) => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
