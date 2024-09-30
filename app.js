@@ -92,10 +92,10 @@ app.use((req, res, next) => {
 
 // Mounting Routers
 app.use('/', viewRouter); // Serverside rendering
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/reviews', reviewRouter);
-app.use('/api/v1/bookings', bookingRouter);
+app.use('/v1/tours', tourRouter);
+app.use('/v1/users', userRouter);
+app.use('/v1/reviews', reviewRouter);
+app.use('/v1/bookings', bookingRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
