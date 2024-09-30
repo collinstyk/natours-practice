@@ -26,6 +26,8 @@ const app = express();
 
 app.use(cors());
 
+app.set('trust proxy', 1); // Trust first proxy (why it is set to 1), vercel would be the first proxy
+
 // You don't need to require 'pug' you only need to install it
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
