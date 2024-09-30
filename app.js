@@ -11,7 +11,7 @@ const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const cors = require('cors');
-const serverless = require('serverless-http');
+// const serverless = require('serverless-http');
 
 const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
@@ -105,5 +105,5 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-exports.handler = serverless(app);
+// exports.handler = serverless(app);
 module.exports = app;
