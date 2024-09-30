@@ -104,4 +104,4 @@ app.all('*', (req, res, next) => {
 app.use(globalErrorHandler);
 
 module.exports = app;
-module.exports = serverless(app);
+module.exports.handler = serverless(app);
